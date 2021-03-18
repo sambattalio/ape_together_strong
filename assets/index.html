@@ -6,6 +6,11 @@
 </head>
 
 <body>
+  <!--- Javscript for creation of chart -->
+  <canvas id="exerciseChangeChart" width="800" height="400"></canvas>
+  <script src= "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
+  <script src = "script.js"></script>
+  
   <h1>Ape Together Strong</h1>
   <!-- Table specification; subject to change -->
   <table>
@@ -16,9 +21,7 @@
   </table>
   <br/>
 
-  <!--
-      Form for POST in api
-   -->
+  <!-- Form for POST in api -->
   <form action="/workout" method="post">
     Exercise:
     <input type="text" name="exercise">
@@ -45,10 +48,10 @@
           row = document.createElement("tr")
 
           // Create table data elements
-          species = document.createElement("td")
-          species.innerHTML = workout.exercise
-          description = document.createElement("td")
-          description.innerHTML = workout.weight
+          exercise = document.createElement("td")
+          exercise.innerHTML = workout.exercise
+          weight = document.createElement("td")
+          weight.innerHTML = workout.weight
 
           // Add data elements to the row
           row.appendChild(exercise)
@@ -59,5 +62,3 @@
       })
   </script>
 </body>
-
-</html>
