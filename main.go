@@ -2,10 +2,14 @@ package main
 
 import (
     "fmt"
+    "context"
     "net/http"
     "encoding/json"
 
     "github.com/gorilla/mux"
+    "go.mongodb.org/mongo-driver/mongo"
+    "go.mongodb.org/mongo-driver/bson"
+    "go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type Workout struct {
@@ -13,13 +17,23 @@ type Workout struct {
     Weight   string `json:"weight"`
 }
 
-// i don't like this
-var workouts []Workout
-
 
 func main() {
     r := buildRouter()
     http.ListenAndServe(":8080", r)
+}
+
+func GetClient() *mongo.Database {
+	client, err := mongo.Connect(
+        context.Background(),
+        options.Client().ApplyURI("mongodb://127.0.0.1/"),
+    )
+
+    if err != nil {
+        fmt.Println(fmt.Errorf("Error: %v", err))
+    }
+
+    return client.Database("workout")
 }
 
 func buildRouter() *mux.Router {
@@ -45,13 +59,21 @@ func handler (w http.ResponseWriter, r *http.Request) {
 
 
 func getWorkoutHandler(w http.ResponseWriter, r *http.Request) {
-    workoutListBytes, err := json.Marshal(workouts)
+    coll := GetClient().Collection("exercises")
+    res, err := coll.Find(context.TODO(), bson.D{})
+    if err != nil {
+        fmt.Println(fmt.Errorf("Error: %v", err))
+    }
+    var all []Workout
+    res.All(context.TODO(), &all)
+    workoutListBytes, err := json.Marshal(all)
 
     if err != nil {
         fmt.Println(fmt.Errorf("Error: %v", err))
 	w.WriteHeader(http.StatusInternalServerError)
 	return
     }
+
 
     w.Write(workoutListBytes)
 }
@@ -72,8 +94,13 @@ func createWorkoutHandler(w http.ResponseWriter, r *http.Request) {
 
     fmt.Println(workout.Exercise)
 
-    workouts = append(workouts, workout)
 
+    // insert into mongodb
+    coll := GetClient().Collection("exercises")
+    _, err = coll.InsertOne(context.TODO(), workout)
+    if err != nil {
+        fmt.Println(fmt.Errorf("Error: %v", err))
+    }
 
     http.Redirect(w, r, "/assets/", http.StatusFound)
 }
