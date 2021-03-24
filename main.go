@@ -33,10 +33,6 @@ type jwtClaims struct {
     jwt.StandardClaims
 }
 
-type JWTPayload struct {
-    Jwt string `json:"jwttoken"`
-}
-
 
 func main() {
     r := buildRouter()
@@ -88,10 +84,11 @@ func getWorkoutHandler(w http.ResponseWriter, r *http.Request) {
     // TODO query based on username
 
     coll := GetClient().Collection("exercises")
-    res, err := coll.Find(context.TODO(), bson.D{})
+    res, err := coll.Find(context.TODO(), bson.D{primitive.E{Key: "username", Value: validateJWT(reqToken)}})
     if err != nil {
         fmt.Println(fmt.Errorf("Error: %v", err))
     }
+
     var all []Workout
     res.All(context.TODO(), &all)
     workoutListBytes, err := json.Marshal(all)
@@ -109,17 +106,9 @@ func getWorkoutHandler(w http.ResponseWriter, r *http.Request) {
 func createWorkoutHandler(w http.ResponseWriter, r *http.Request) {
     workout := Workout{}
 
-    // get jwt
-    for name, values := range r.Header {
-    // Loop over all values for the name.
-    for _, value := range values {
-        fmt.Println(name, value)
-    }
-	}
     reqToken := r.Header.Get("Authorization")
-    fmt.Println(reqToken);
-    //splitToken := strings.Split(reqToken, "Bearer ")
-    //reqToken = splitToken[1]
+    splitToken := strings.Split(reqToken, "Bearer ")
+    reqToken = splitToken[1]
 
     // load json data
     err := json.NewDecoder(r.Body).Decode(&workout);
@@ -128,8 +117,8 @@ func createWorkoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusInternalServerError)
 	return
     }
-    fmt.Println(reqToken)
-    fmt.Println(workout.Exercise);
+
+    workout.Username = validateJWT(reqToken);
 
     // insert into mongodb
     coll := GetClient().Collection("exercises")
@@ -172,16 +161,10 @@ func loginAttemptHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func tokenCheckHandler(w http.ResponseWriter, r *http.Request) {
-    jwtPayload := JWTPayload{}
-
-    err := json.NewDecoder(r.Body).Decode(&jwtPayload);
-    if err != nil {
-        fmt.Println(fmt.Errorf("Error: %v", err))
-	w.WriteHeader(http.StatusInternalServerError)
-	return
-    }
-
-    res := validateJWT(jwtPayload.Jwt)
+    reqToken := r.Header.Get("Authorization")
+    splitToken := strings.Split(reqToken, "Bearer ")
+    reqToken = splitToken[1]
+    res := validateJWT(reqToken)
     w.Write([]byte(fmt.Sprintf("%s", res)))
 }
 

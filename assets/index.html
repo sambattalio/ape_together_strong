@@ -34,6 +34,7 @@
 				<tr>
 				  <th>Exercise</th>
 				  <th>Weight</th>
+				  <th>Date</th>
 				</tr>
 			</table>
 			<br/>
@@ -43,7 +44,9 @@
 			Exercise:
 			<input type="text" name="exercise">
 			<br/> Weight:
-			<input type="number" name="&nbsp weight">
+			<input type="number" name="weight">
+			<br/> Date:
+			<input type="date" name="date">
 			<br/>
 			<input id="submit" type="submit" value="Submit">
 			</form>
@@ -73,10 +76,18 @@ fetch("/workout", {headers: {'Authorization': bearer}})
           exercise.innerHTML = workout.exercise
           weight = document.createElement("td")
           weight.innerHTML = "&nbsp" + workout.weight
+	  datetime = document.createElement("td")
+          dateObj = new Date(1000 * workout.date);
+	  var month = dateObj.getUTCMonth() + 1; //months from 1-12
+          var day = dateObj.getUTCDate();
+          var year = dateObj.getUTCFullYear();
+          newdate = year + "/" + month + "/" + day;
+	  datetime.innerHTML = "&nbsp" + newdate; 
 
           // Add data elements to the row
           row.appendChild(exercise)
           row.appendChild(weight)
+	  row.appendChild(datetime)
           // add row element to table
           workoutTable.appendChild(row)
         })

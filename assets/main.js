@@ -1,7 +1,6 @@
 isLoggedIn();
 
 function isLoggedIn() {
-    console.log("checking if logged in");
     const token = getCookie("token");
     // verify token
     if (!token) {
@@ -10,9 +9,8 @@ function isLoggedIn() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/check_token", true);
     xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-    xhr.send(JSON.stringify({
-            jwttoken: token
-    }))
+    xhr.setRequestHeader("Authorization", "Bearer " + token);
+    xhr.send();
     xhr.onload = function() {
       // new jwt
       console.log("response", this.responseText);
@@ -29,19 +27,23 @@ exerciseButton.addEventListener("click", (e) => {
     e.preventDefault();
     const workout = exerciseForm.exercise.value;
     const weight = exerciseForm.weight.value;
-    submitExercise(workout, weight); 
+    const date   = new Date(exerciseForm.date.value).getTime() / 1000;
+    submitExercise(workout, weight, date); 
 })
 
-function submitExercise(workout, weightvar) {
+function submitExercise(workout, weightvar, datetime) {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/workout", true);
     xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-    xhr.setRequestHeader("Authorization", "Bearer 20340230413204");
+    xhr.setRequestHeader("Authorization", "Bearer " + getCookie("token"));
     xhr.send(JSON.stringify({
 	exercise: workout,
-	weight: weightvar
+	weight: weightvar,
+	date: datetime
     }))
     xhr.onload = function() {
+	console.log("done");
+	location.reload();
     }
 }
 
