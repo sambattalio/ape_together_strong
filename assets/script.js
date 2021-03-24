@@ -21,7 +21,8 @@ var exerciseChangeChart = new Chart(ctx, {
     },
     
     options: {
-	maintainAspectRatio: false
-	//beginAtZero: true
+		responsive: false
+		//maintainAspectRatio: false
+		//beginAtZero: true
     }
 });
