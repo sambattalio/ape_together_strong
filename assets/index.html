@@ -43,7 +43,7 @@
 			Exercise:
 			<input type="text" name="exercise">
 			<br/> Weight:
-			<input type="number" name="weight">
+			<input type="number" name="&nbsp weight">
 			<br/>
 			<input id="submit" type="submit" value="Submit">
 			</form>
@@ -72,7 +72,7 @@ fetch("/workout", {headers: {'Authorization': bearer}})
           exercise = document.createElement("td")
           exercise.innerHTML = workout.exercise
           weight = document.createElement("td")
-          weight.innerHTML = workout.weight
+          weight.innerHTML = "&nbsp" + workout.weight
 
           // Add data elements to the row
           row.appendChild(exercise)
