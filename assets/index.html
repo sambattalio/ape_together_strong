@@ -72,11 +72,16 @@ fetch("/workout", {headers: {'Authorization': bearer}})
           // Create table data elements
           exercise = document.createElement("td")
           exercise.innerHTML = workout.exercise
+		  
+		  spacer = document.createElement("td)
+		  space.innerHTML = "&nbsp"
+		  
           weight = document.createElement("td")
           weight.innerHTML = workout.weight
 
           // Add data elements to the row
           row.appendChild(exercise)
+		  row.appendChild(spacer)
           row.appendChild(weight)
           // add row element to table
           workoutTable.appendChild(row)
