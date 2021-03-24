@@ -20,4 +20,9 @@ body {
 #table {
 	width: 450px;
 	margin: 6px 50px;
+	text-align: left;
+}
+
+#prog {
+	text-align: center;
 }
