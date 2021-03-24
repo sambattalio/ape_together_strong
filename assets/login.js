@@ -19,9 +19,8 @@ function isLoggedIn() {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/check_token", true);
     xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-    xhr.send(JSON.stringify({
-            jwttoken: token
-    }))
+    xhr.setRequestHeader("Authorization", "Bearer " + token);
+    xhr.send();
     xhr.onload = function() {
       // new jwt
       console.log(this.responseText);
