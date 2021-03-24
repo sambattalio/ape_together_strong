@@ -11,6 +11,8 @@
 	font-family: 'Rubik', sans-serif;
  }
  </style>
+
+  <script defer src="main.js"></script>
 </head>
 
 <body>
@@ -35,13 +37,13 @@
 			<br/>
 
 			<!-- Form for POST in api -->
-			<form action="/workout" method="post">
+			<form id="exercise">
 			Exercise:
 			<input type="text" name="exercise">
 			<br/> Weight:
 			<input type="number" name="weight">
 			<br/>
-			<input type="submit" value="Submit">
+			<input id="submit" type="submit" value="Submit">
 			</form>
 		</div>
 	</div>
@@ -55,7 +57,9 @@
     /*
       make get call to /workout (placeholder for our database)
     */
-    fetch("/workout")
+bearer = 'Bearer ' + getCookie('token');
+
+fetch("/workout", {headers: {'Authorization': bearer}})
       .then(response => response.json())
       .then(workoutList => {
         workoutList.forEach(workout => {
@@ -75,6 +79,22 @@
           workoutTable.appendChild(row)
         })
       })
+
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
   </script>
 </body>
 </html>
