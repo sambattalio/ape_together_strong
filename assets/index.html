@@ -32,8 +32,7 @@
 			<table>
 				<caption id="tablecaption"> Workout Plan </caption>
 				<tr>
-				  <th>Exercise</th>
-				  <th> &nbsp </th>
+				  <th>Exercise &nbsp</th>
 				  <th>Weight</th>
 				</tr>
 			</table>
@@ -73,15 +72,11 @@ fetch("/workout", {headers: {'Authorization': bearer}})
           exercise = document.createElement("td")
           exercise.innerHTML = workout.exercise
 		  
-		  spacer = document.createElement("td)
-		  space.innerHTML = "&nbsp"
-		  
           weight = document.createElement("td")
           weight.innerHTML = workout.weight
 
           // Add data elements to the row
           row.appendChild(exercise)
-		  row.appendChild(spacer)
           row.appendChild(weight)
           // add row element to table
           workoutTable.appendChild(row)
