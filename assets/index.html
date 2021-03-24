@@ -33,19 +33,26 @@
 				<caption id="tablecaption"> Workout Plan </caption>
 				<tr>
 				  <th>Exercise</th>
-				  <th>Weight</th>
+				  <th>&nbsp Weight</th>
 				</tr>
 			</table>
 			<br/>
 
 			<!-- Form for POST in api -->
 			<form id="exercise">
-			Exercise:
-			<input type="text" name="exercise">
-			<br/> Weight:
-			<input type="number" name="&nbsp weight">
-			<br/>
-			<input id="submit" type="submit" value="Submit">
+				<table>
+					<tr>
+						<td> Exercise: </td>
+						<td> <input type="text" name="exercise"> </td>
+					</tr>
+					<br/>
+					<tr>
+						<td> Weight: </td>
+						<td> <input type="number" name="weight"> </td>
+					</tr>
+					<br/>
+				</table>
+				<input id="submit" type="submit" value="Submit">
 			</form>
 		</div>
 	</div>
