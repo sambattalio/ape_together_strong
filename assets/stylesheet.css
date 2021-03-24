@@ -18,7 +18,7 @@ body {
 }
 
 #table {
-	width: 450px;
+
 	margin: 6px 50px;
 	text-align: left;
 }
@@ -27,6 +27,7 @@ body {
 	text-align: center;
 }
 
-#plantext {
-	text-align: center;
+#tablecaption {
+	font-weight: 700;
+	font-size: 24px;
 }
